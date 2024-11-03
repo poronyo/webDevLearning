@@ -21,15 +21,37 @@ console.log('---------------');
 // console.log(man1.name)
 // console.log(houseKeeper1)
 
-function houseKeeper (yearsOfEperience, name, cleaningRepertoire){
-    this.yearsOfEperience= yearsOfEperience;
-    this.name =name;
-    this.cleaningRepertoire = cleaningRepertoire;
-    this.cleaning = function(){
-        console.log("cleaning in progress.....")
-    }
-}
+//------------------------------------------------------------
+
+// function houseKeeper (yearsOfEperience, name, cleaningRepertoire){
+    // this.yearsOfEperience= yearsOfEperience;
+    // this.name =name;
+    // this.cleaningRepertoire = cleaningRepertoire;
+    // this.cleaning = function(){
+        // console.log("cleaning in progress.....")
+    // }
+// }
+// 
+// 
+// let houseKeeper_new = new houseKeeper(12,"james",["bedroom"])
+// houseKeeper_new.cleaning()
+// 
 
 
-let houseKeeper_new = new houseKeeper(12,"james",["bedroom"])
-houseKeeper_new.cleaning()
+
+// ------------------------------------------------------------
+
+
+// test.addEventListener("keydown", function(event){
+    // console.log(event.key);
+// });
+// 
+
+// function anotherEventListener(typeofEvent, callback){
+//    Detect Event Code...
+// 
+    // let eventThatHappend ={
+        // eventType : ""
+    // }
+// 
+// }

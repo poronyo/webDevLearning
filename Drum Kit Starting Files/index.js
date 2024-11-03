@@ -7,6 +7,7 @@ for(let i=0;i < numberOfDrumButtons; i++){
 
         let buttonInnerHTML = this.innerHTML;
         makeSound(buttonInnerHTML);
+        buttonAnimation(buttonInnerHTML);
     });
 }
 // Detecting Keyboard press
@@ -14,6 +15,7 @@ for(let i=0;i < numberOfDrumButtons; i++){
 document.addEventListener("keypress", function (event)
 {
     makeSound(event.key);
+    buttonAnimation(event.key);
 
 });
 
@@ -22,7 +24,7 @@ document.addEventListener("keypress", function (event)
 function makeSound(key){
     switch(key){
         case "w" :  
-            let tom1 = new Audio("sounds/tom-1.mp3");
+            let tom1 = new Audio("sounds/tom-1.mp3"); 
             tom1.play();
             break;
             
@@ -59,4 +61,16 @@ function makeSound(key){
         default: console.log(buttonInnerHTML)                     
     }
 
+}
+
+function buttonAnimation(currentKey){
+
+    let activeButton = document.querySelector("."+currentKey);
+    activeButton.classList.add("pressed");
+
+     setTimeout(function(){
+        activeButton.classList.remove("pressed");
+     },200)
+
+ 
 }

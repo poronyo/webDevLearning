@@ -1,0 +1,141 @@
+!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href=
+"https://fonts.googleapis.com">
+	<link rel="preconnect" href=
+"https://fonts.gstatic.com" crossorigin>
+	<link href=
+"https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap"
+		rel="stylesheet">
+	<title>Simon Game</title>
+	<!-- CSS -->
+	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			height: 100vh;
+			margin: 0;
+			background-color: rgb(206, 201, 201);
+			font-family: 'Balsamiq Sans', sans-serif;
+		}
+
+		#controls {
+			margin: 20px 0 20px 0;
+		}
+
+		#strict-mode {
+			margin-right: 20px;
+		}
+
+		#simon-board {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px;
+			max-width: 300px;
+			text-align: center;
+			margin-bottom: 1rem;
+		}
+
+		.simon-btn {
+			width: 100px;
+			height: 100px;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			font-size: 18px;
+			font-weight: bold;
+			background-color: #3498db;
+			color: #fff;
+			transition: background-color 0.3s;
+		}
+
+		.top-left {
+			background-color: darkgreen;
+		}
+
+		.top-right {
+			background-color: darkred;
+		}
+
+		.bottom-left {
+			background-color: goldenrod;
+		}
+
+		.bottom-right {
+			background-color: darkblue;
+		}
+
+		.level-count {
+			color: red;
+			background-color: rgb(81, 0, 0);
+			padding: 0.25rem 1rem;
+		}
+
+		#start-btn,
+		#power-btn {
+			font-family: 'Balsamiq Sans', sans-serif;
+			margin-top: 30px;
+			padding: 10px;
+			font-size: 16px;
+			cursor: pointer;
+			background-color: #2ecc71;
+			color: #fff;
+			border: none;
+			outline: none;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		#start-btn:hover,
+		#power-btn:hover {
+			background-color: #27ae60;
+		}
+
+		#start-btn:disabled,
+		#power-btn:disabled {
+			background-color: #484a4b;
+			cursor: not-allowed;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Simon Game</h1>
+	<div id="controls">
+		<label for="strict-mode">Strict Mode</label>
+		<input type="checkbox" id="strict-mode"
+			onchange="toggleStrictMode()">
+	</div>
+
+	<div id="simon-board">
+		<button class="simon-btn top-left"
+				onclick="handleClick(this)"
+		data-color="1" disabled></button>
+		<button class="simon-btn top-right"
+				onclick="handleClick(this)"
+		data-color="2" disabled></button>
+		<button class="simon-btn bottom-left"
+				onclick="handleClick(this)"
+		data-color="3" disabled></button>
+		<button class="simon-btn bottom-right"
+				onclick="handleClick(this)"
+		data-color="4" disabled></button>
+	</div>
+
+	<div id="level">
+		<span>Level: 
+			<span class="level-count">-</span>
+		</span>
+	</div>
+	<button id="power-btn"
+			onclick="togglePower()">Start</button>
+
+</body>
+
+</html>
