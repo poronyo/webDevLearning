@@ -95,6 +95,12 @@ function handleClick(){
             userSequence = [];
 			level++;
 			levelCount.textContent = level;
+            if (level <= 20) {
+                setTimeout(() => nextRound(), 1000);
+            } else {
+                alert("Congratulations! You won!");
+                startGame();
+            }
 
         }
 
