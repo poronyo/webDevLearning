@@ -98,7 +98,8 @@ function handleClick(){
             if (level <= 20) {
                 setTimeout(() => nextRound(), 1000);
             } else {
-                alert("Congratulations! You won!");
+                alert("Congratulations! You won!!!");
+                console.log("test")
                 startGame();
             }
 
