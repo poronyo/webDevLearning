@@ -27,19 +27,13 @@
 // ---------------------
 
 
-import inquirer from "inquirer";
-import qr from "qr-image";
-import fs from "fs"
+import inquirer from 'inquirer';
+
 inquirer
-  .prompt([{
-    message : "Type in your URL:",
-    name: "URL"}
+  .prompt([
     /* Pass your questions in here */
   ])
   .then((answers) => {
-    const url = answer.URL;
-    var qr_svg = qr.image(URL);
-    qr_svg.pipe(require('fs').createWriteStream('qr-image_png'));
     // Use user feedback for... whatever!!
   })
   .catch((error) => {
