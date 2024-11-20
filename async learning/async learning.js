@@ -51,24 +51,42 @@
 import axios from "axios"
 
 
-async function getFact(){
-    const url = "https://api.aakhilv.me/fun/facts";
-    const result = await axios.get(url);
-    return result.data[0]
-}
+// async function getFact(){
+//     const url = "https://api.aakhilv.me/fun/facts";
+//     const result = await axios.get(url);
+//     return result.data[0]
+// }
 
 
-async function main(){
-    console.log("Begin")
-    const result = await getFact()
-    console.log( "result : ",result)
+// async function main(){
+//     console.log("Begin")
+//     const result = await getFact()
+//     console.log( "result : ",result)
 
-    console.log("End")
-    // const secondresult = await getFact()
-    // console.log( "secondresult : ",secondresult)
-
-
-}
+//     console.log("End")
+//     // const secondresult = await getFact()
+//     // console.log( "secondresult : ",secondresult)
 
 
-main()
+// }
+
+
+// main()
+
+const app = express();
+const port = 3000;
+
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.get("/", async (req,res)=>{
+    try{
+        const response = await axios.get("https://bored-api.appbrewery.com/random");
+        res.render("index.ejs",{activity: response.data});
+    } catch (error){
+        console.error("Failed to make request:",error.message);
+        res.status(500).send("Failed to fetch activity,Please try again.");
+    }
+});
+
+
