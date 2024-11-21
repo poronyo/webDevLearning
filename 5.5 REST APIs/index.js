@@ -96,7 +96,7 @@ app.post("/patch-secret", async (req, res) => {
   }
   catch(error){
     console.error("Error why using API",error)
-    res.render("index.ejs",{content: JSON.stringify(error)})
+    res.render("index.ejs",{content: JSON.stringify(error.resonse.data)})
   
   }
   // TODO 4: Use axios to PATCH the data from req.body to the secrets api servers.
@@ -106,12 +106,16 @@ app.post("/delete-secret", async (req, res) => {
   const searchId = req.body.id;
   // TODO 5: Use axios to DELETE the item with searchId from the secrets api servers.
   try{
-    result = await axios.delete(API_URL+"/secrets/"+searchId,config);
-    res.render("index.ejs",{content: result.data+"\n Hello world"})
+    const result = await axios.delete(API_URL+"/secrets/"+searchId,config);
+    console.log("result data",result.data.message)
+    res.render("index.ejs",{content: JSON.stringify(result.data.message)})
   }
   catch(error){
-    console.error("Error why using API",error)
-    res.render("index.ejs",{content: error})
+    
+    console.error("Error why using API date",error.response.headers.date)
+    
+
+    res.render("index.ejs",{content: JSON.stringify(error.response.data)})
   }
 
 
