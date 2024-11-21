@@ -25,22 +25,39 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/get-secret", async (req, res) => {
-  const searchId = req.body.id;
-  try {
-    const result = await axios.get(API_URL + "/secrets/" + searchId, config);
-    res.render("index.ejs", { content: JSON.stringify(result.data) });
-    console.log(result.data)
-  } catch (error) {
-    res.render("index.ejs", { content: JSON.stringify(error.response.data) });
+  try{
+
+    const searchId = req.body.id;
+    //console.log("req body",req.body)
+    console.log("req body id",req.body.id)
+    const result= await axios.get(API_URL+"/secrets/"+searchId,config)
+    //console.log("result :",result)
+    console.log("result data:",result.data)
+    
+    res.render("index.ejs",{content: JSON.stringify(result.data)})
   }
+  catch(error){
+    console.log("ERROR WHY USING AN API :",error.response.data)
+    res.render("index.ejs",{content: JSON.stringify(error.message)})
+  }
+  
+  
+  // const searchId = req.body.id;
+  // try {
+  //   const result = await axios.get(API_URL + "/secrets/" + searchId, config);
+  //   res.render("index.ejs", { content: JSON.stringify(result.data) });
+  //   console.log(result.data)
+  // } catch (error) {
+  //   res.render("index.ejs", { content: JSON.stringify(error.response.data) });
+  // }
 });
 
 app.post("/post-secret", async (req, res) => {
   try{
-  const result = await axios.get(API_URL + "/secrets/", req.body, config);
-  res.render("index.ejs",{content: json.stringify(result.data)})
+  console.log("req body",req.body)
+  const result = await axios.post(API_URL + "/secrets/", req.body, config);
+  res.render("index.ejs",{content: JSON.stringify(result.data)})
   // TODO 2: Use axios to POST the data from req.body to the secrets api servers.
-
 
   }
   catch(error){
@@ -52,17 +69,52 @@ app.post("/post-secret", async (req, res) => {
 
 app.post("/put-secret", async (req, res) => {
   const searchId = req.body.id;
+  try{
+    const result = await axios.put(API_URL+"/secrets/"+searchId,req.body,config);
+    console.log("result : ",result);
+    res.render("index.ejs",{content: JSON.stringify(result.data)});
+  }
+  catch(error){
+    console.error("Error why using API",error);
+    
+    res.render("index.ejs",{content: error.response.data})
+
+  }
+  
   // TODO 3: Use axios to PUT the data from req.body to the secrets api servers.
 });
 
 app.post("/patch-secret", async (req, res) => {
   const searchId = req.body.id;
+  console.log("req body : ",req.body)
+  try{
+    const result = await axios.patch(API_URL+"/secrets/"+searchId,req.body,config);
+    res.render("index.ejs",{content: JSON.stringify(result.data)})
+    console.log("res body : ",res.data)
+
+
+  }
+  catch(error){
+    console.error("Error why using API",error)
+    res.render("index.ejs",{content: JSON.stringify(error)})
+  
+  }
   // TODO 4: Use axios to PATCH the data from req.body to the secrets api servers.
 });
 
 app.post("/delete-secret", async (req, res) => {
   const searchId = req.body.id;
   // TODO 5: Use axios to DELETE the item with searchId from the secrets api servers.
+  try{
+    result = await axios.delete(API_URL+"/secrets/"+searchId,config);
+    res.render("index.ejs",{content: result.data+"\n Hello world"})
+  }
+  catch(error){
+    console.error("Error why using API",error)
+    res.render("index.ejs",{content: error})
+  }
+
+
 });
 
 app.listen(port, () => {
