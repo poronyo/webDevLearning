@@ -8,185 +8,158 @@ const masterKey = "4VGP2DN-6EWM4SJ-N6FGRHV-Z3PR3TT";
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //1. GET a random joke
-app.get("/random/", async (req,res)=>{
-  try{
-    const randomIndex = Math.floor(Math.random()* jokes.length);
+app.get("/random/", async (req, res) => {
+  try {
+    const randomIndex = Math.floor(Math.random() * jokes.length);
     res.json(jokes[randomIndex]);
-    console.log("random joke :",jokes[randomIndex])
-    console.log("joke 1 :",jokes[1]);
-
+    console.log("random joke :", jokes[randomIndex]);
+    console.log("joke 1 :", jokes[1]);
+  } catch (error) {
+    console.log("Error while using an api" + error);
   }
-  catch(error){
-    console.log("Error while using an api" + error)
-
-  }
-}) 
+});
 
 //2. GET a specific joke
-app.get("/jokes/:id", async(req,res)=>{
-  // console.log("req body",req) 
+app.get("/jokes/:id", async (req, res) => {
+  // console.log("req body",req)
   // console.log("req parameter",req.params)
-  // console.log("id type",typeof(req.params.id)) 
+  // console.log("id type",typeof(req.params.id))
   // const id = parseInt(req.params.id);
-  const specificJoke = jokes.find((A)=>A.id == req.params.id)
+  const specificJoke = jokes.find((A) => A.id == req.params.id);
   console.log(specificJoke);
-  res.json(specificJoke)
+  res.json(specificJoke);
   // res.json({body : "hello world"})
-})
+});
 
 //3. GET a jokes by filtering on the joke type
-app.get("/filter", async(req,res)=>{
-  try{
-    const typeFilter =  req.query.type;
-    console.log("req body",req.query.type);
-    const jokeResponse = jokes.filter((A)=> A.jokeType == typeFilter)
+app.get("/filter", async (req, res) => {
+  try {
+    const typeFilter = req.query.type;
+    console.log("req body", req.query.type);
+    const jokeResponse = jokes.filter((A) => A.jokeType == typeFilter);
     // console.log(jokeResponse)
-    console.log("response count ",jokeResponse.length);
-    
-    console.log("type of response",typeof(att));
+    console.log("response count ", jokeResponse.length);
 
+    console.log("type of response", typeof att);
 
     res.json(jokeResponse);
-
-
+  } catch (error) {
+    console.log("Error while using an API", error);
   }
-  catch(error){
-    console.log("Error while using an API",error)
-
-  }
-})
+});
 
 //4. POST a new joke
-app.post("/jokes", (req,res)=>{
-  try{
+app.post("/jokes", (req, res) => {
+  try {
     // console.log("req query",req.query)
-    const textReq = req.query.text
-    const typeReq = req.query.type
+    const textReq = req.query.text;
+    const typeReq = req.query.type;
     // console.log("before post data",jokes.length)
 
-    let newData ={
-      id: parseInt(jokes.length) +1,
+    let newData = {
+      id: parseInt(jokes.length) + 1,
       jokeText: textReq,
-      jokeType: typeReq
+      jokeType: typeReq,
     };
 
-    jokes.push(newData)
+    jokes.push(newData);
     // console.log("after post data",jokes.length)
 
     res.json({
       body: "post jokes successfully",
-      newData: newData
-    
-    })
+      newData: newData,
+    });
+  } catch (error) {
+    console.log("Error why using an API :", error);
+    res.json({ body: error });
   }
-  catch(error){
-    console.log("Error why using an API :",error)
-    res.json({body: error})
-
-  }
-})
+});
 
 //5. PUT a joke
-app.put("/jokes/:id", async(req,res)=>{
-  try{
+app.put("/jokes/:id", async (req, res) => {
+  try {
     // console.log(req)
-    // const idReq 
-    const textReq = req.query.text
-    const typeReq = req.query.type
+    // const idReq
+    const textReq = req.query.text;
+    const typeReq = req.query.type;
     // console.log("before post data",jokes.length)
 
-    let newData ={
+    let newData = {
       id: parseInt(req.params.id),
       jokeText: textReq,
-      jokeType: typeReq
+      jokeType: typeReq,
     };
-    let jokeIndex = jokes.findIndex((A)=> A.id == req.params.id);
+    let jokeIndex = jokes.findIndex((A) => A.id == req.params.id);
 
-    jokes[jokeIndex] = newData
+    jokes[jokeIndex] = newData;
 
     // console.log(`New joke index is ${jokeIndex} : ${ jokes[jokeIndex] }`)
-    console.log(`New joke index is ${jokeIndex} :`,jokes[jokeIndex] )
-
+    console.log(`New joke index is ${jokeIndex} :`, jokes[jokeIndex]);
 
     // console.log("after post data",jokes.length)
-    res.json({body: "put jokes successfully"})
-
+    res.json({ body: "put jokes successfully" });
+  } catch (error) {
+    console.log("error occure while using an API ", error);
   }
-  catch(error){
-    console.log("error occure while using an API ",error)
-
-  }
-
-})
+});
 
 //6. PATCH a joke
 app.patch("/jokes/:id", async (req, res) => {
-  try{
+  try {
     console.log(req.query);
     const id = parseInt(req.params.id);
     const typeReq = req.query.type;
     const textReq = req.query.text;
-    
-    let targetJoke = jokes.find((A)=>A.id === id)
-    let targetJokeIndex = jokes.findIndex((A)=>A.id === id)
 
-    
+    let targetJoke = jokes.find((A) => A.id === id);
+    let targetJokeIndex = jokes.findIndex((A) => A.id === id);
+
     const newReplaceJoke = {
-      id:id,
+      id: id,
       jokeText: textReq || targetJoke.jokeText,
       jokeType: typeReq || targetJoke.jokeType,
     };
-    jokes[targetJokeIndex] = newReplaceJoke
-    
-    
-    console.log(`Updated joke ${targetJokeIndex}`,jokes[targetJokeIndex]) 
-    
-    res.json("Hello world")
+    jokes[targetJokeIndex] = newReplaceJoke;
 
+    console.log(`Updated joke ${targetJokeIndex}`, jokes[targetJokeIndex]);
 
-
-  }catch(error){
-    res.json("Error while using an api",error.code)
-
-
+    res.json("Hello world");
+  } catch (error) {
+    res.json("Error while using an api", error.code);
   }
 });
 
 //7. DELETE Specific joke
 
-app.delete("/jokes/:id", async (req,res)=>{
-  try{
-    console.log(req.params)
+app.delete("/jokes/:id", async (req, res) => {
+  try {
+    console.log(req.params);
     const id = parseInt(req.params.id);
-    const targetJoke = jokes.find((A)=> A.id === id);
-    const targetJokeIndex = jokes.findIndex((A)=> A.id === id);
-    console.log("target joke index ",targetJokeIndex)
-   
+    const targetJoke = jokes.find((A) => A.id === id);
+    const targetJokeIndex = jokes.findIndex((A) => A.id === id);
+    console.log("target joke index ", targetJokeIndex);
 
-    console.log("Before delete joke",jokes.length)
-    console.log("deleting joke",targetJoke)
-    if(targetJokeIndex >-1){
-      jokes.splice(targetJokeIndex,1);
+    console.log("Before delete joke", jokes.length);
+    console.log("deleting joke", targetJoke);
+    if (targetJokeIndex > -1) {
+      jokes.splice(targetJokeIndex, 1);
       res.json(`${targetJoke} deleted succesfully `);
-
-    }else{
+    } else {
       res.status(404);
-      res.json({ error: `Joke with id: ${id} not found. No jokes were deleted.` });
+      res.json({
+        error: `Joke with id: ${id} not found. No jokes were deleted.`,
+      });
     }
 
-
-    console.log("After delete joke",jokes.length)
-
-    
-
+    console.log("After delete joke", jokes.length);
+  } catch (error) {
+    res.json("Error while using an api", error.code);
   }
-  catch(error){
-    res.json("Error while using an api",error.code)
-
-  }
-})
+});
 
 //8. DELETE All jokes
+
+app;
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
