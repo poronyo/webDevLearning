@@ -131,35 +131,58 @@ app.patch("/jokes/:id", async (req, res) => {
 
 //7. DELETE Specific joke
 
-app.delete("/jokes/:id", async (req, res) => {
-  try {
-    console.log(req.params);
-    const id = parseInt(req.params.id);
-    const targetJoke = jokes.find((A) => A.id === id);
-    const targetJokeIndex = jokes.findIndex((A) => A.id === id);
-    console.log("target joke index ", targetJokeIndex);
+// app.delete("/jokes/:id", (req, res) => {
+//   try {
+//     console.log(req.params);
+//     const id = parseInt(req.params.id);
+//     const targetJoke = jokes.find((A) => A.id === id);
+//     const targetJokeIndex = jokes.findIndex((A) => A.id === id);
+//     console.log("target joke index ", targetJokeIndex);
 
-    console.log("Before delete joke", jokes.length);
-    console.log("deleting joke", targetJoke);
-    if (targetJokeIndex > -1) {
-      jokes.splice(targetJokeIndex, 1);
-      res.json(`${targetJoke} deleted succesfully `);
-    } else {
-      res.status(404);
-      res.json({
-        error: `Joke with id: ${id} not found. No jokes were deleted.`,
-      });
-    }
+//     console.log("Before delete joke", jokes.length);
+//     console.log("deleting joke", targetJoke);
+//     if (targetJokeIndex > -1) {
+//       jokes.splice(targetJokeIndex, 1);
+//       res.json(`${targetJoke} deleted succesfully `);
+//     } else {
+//       res.status(404);
+//       res.json({
+//         error: `Joke with id: ${id} not found. No jokes were deleted.`,
+//       });
+//     }
 
-    console.log("After delete joke", jokes.length);
-  } catch (error) {
-    res.json("Error while using an api", error.code);
+//     console.log("After delete joke", jokes.length);
+//   } catch (error) {
+//     res.json("Error while using an api", error.code);
+//   }
+// });
+//8. DELETE All jokes
+app.delete("/jokes/all", (req, res) => {
+  console.log("query param :", req.query);
+  const userKey = req.query.key;
+  if (userKey === masterKey) {
+    jokes = [];
+    res.sendStatus(200).json(`${targetJoke} deleted succesfully `);
+  } else {
+    res
+      .status(404)
+      .json({ error: `You are not authorised to perform this action.` });
+    console.log("Error while using as API", error);
   }
 });
 
-//8. DELETE All jokes
-
-app;
+app.delete("/jokes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const searchIndex = jokes.findIndex((joke) => joke.id === id);
+  if (searchIndex > -1) {
+    jokes.splice(searchIndex, 1);
+    res.sendStatus(200);
+  } else {
+    res
+      .status(404)
+      .json({ error: `Joke with id: ${id} not found. No jokes were deleted.` });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
