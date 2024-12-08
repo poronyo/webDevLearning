@@ -125,13 +125,34 @@ var numbers = [3, 56, 2, 48, 5];
 
 //--------------------------------------------------
 
-let time = new Date().toLocaleTimeString();
-console.log(time);
+// let time = new Date().toLocaleTimeString();
+// console.log(time);
+
+// function getTime(){
+
+// } 
+
+// let times = () =>new Date().toLocaleTimeString();
+// console.log(times())
+//--------------------------------------------------
 
 
-function getTime(){
+//---------------------  ES6 Spread Operator -----------------
+//-----------work with value-------------
+const citrus = ["Lime", "Lemon", "Orange"];
+const fruitsa = ["Apple", "Banana", "Coconut", ... citrus]
+const fruits2 = ["Apple",  ... citrus, "Banana", "Coconut"]
 
-} 
+//-----------work with objects-------------
+const fullName ={
+  fName: "James",
+  lName: "Tony",
+};
 
-let times = () =>new Date().toLocaleTimeString();
-console.log(times())
+const user ={
+  ...fullName,
+  id:1,
+  username: "james tony"
+}
+
+console.log(user)
