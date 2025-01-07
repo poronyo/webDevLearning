@@ -7,6 +7,7 @@ import axios from "axios";
 function App() {
   const [count, setCount] = useState(0);
   const [pok, setPoke] = useState("");
+  const [loading, setLoading] = useState()
 
   useEffect(() => {
     let abortController = new AbortController();
@@ -17,9 +18,7 @@ function App() {
           signal: abortController.signal,
         });
 
-        setPoke(response.data)
-
-        
+        setPoke(response.data);
       } catch (error) {
       } finally {
       }
