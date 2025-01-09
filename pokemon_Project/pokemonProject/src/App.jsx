@@ -6,7 +6,6 @@ import axios from "axios";
 import FavoriteArea from "./FavoriteArea";
 
 function App() {
-  const [count, setCount] = useState(0);
   const [poke, setPoke] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -48,7 +47,7 @@ function App() {
 
   function nextOnClick() {
     return setPokeId((prevNum) => {
-      return prevNum + 1;
+      return prevNum + 10;
     });
   }
   function prevOnClick() {
@@ -65,37 +64,43 @@ function App() {
 
   const nextOnClicked = () => {
     setPokeId((prevNum) => {
-      return prevNum + 1;
+      return prevNum + 10;
     });
   };
 
   function addFavorite() {
-    console.log("fav: ", fav);
+    // console.log("fav: ", fav);
     return setFav((prevArray) => {
       return [...prevArray, poke];
     });
   }
 
   return (
-    <div className='grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2  gap-4'>
-      <div >
-        
-        <h1>{poke?.name}</h1>
-        <button onClick={addFavorite}> Add favorite </button>
-        <br />
-        {poke && (
-          <img
-            src={poke?.sprites?.other?.home.front_default}
-            alt={poke?.name}
-          />
+    <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  gap-4">
+      <div>
+        {loading ? (
+          <p> loading... </p>
+        ) : (
+          <>
+            <h1>{poke?.name}</h1>
+            <button onClick={addFavorite}> Add favorite </button>
+            <br />
+            {poke && (
+              <img
+                src={poke?.sprites?.other?.home.front_default}
+                alt={poke?.name}
+              />
+            )}
+            <ul>
+              {poke?.abilities?.map((item, index) => {
+                return <li key={index}>{item.ability.name}</li>;
+              })}
+            </ul>
+            <br />
+            <button onClick={prevOnClick}> previous </button>
+            <button onClick={nextOnClick}> next </button>
+          </>
         )}
-        <ul>
-          {poke?.abilities?.map((item, index) => {
-            return <li key={index}>{item.ability.name}</li>;
-          })}
-        </ul>
-        <button onClick={prevOnClick}> previous </button>
-        <button onClick={nextOnClick}> next </button>
       </div>
       <div>
         <h2>Favorite pokemon</h2>
