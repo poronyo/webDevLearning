@@ -6,12 +6,19 @@ import FavoritePokemon from "./Component/FavoritePokemon";
 /* 12-01 progress   */
 function App() {
   const [poke, setPoke] = useState(null);
-  const [pokeID, setPokeID] = useState(1);
+  const [pokeID, setPokeID] = useState(700);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [fav, setFav] = useState([]);
 
   const [userinput, setUserInput] = useState(null);
+
+  useEffect(() => {
+    const storedFavArray = localStorage.getItem("favArray");
+    if (storedFavArray) {
+      setFav(JSON.parse(storedFavArray));
+    }
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -29,7 +36,6 @@ function App() {
         setPoke(response.data);
         console.log("poke :", poke);
         console.log("poke name :", poke.species.name);
-
         setError("");
         setLoading(false);
       } catch (error) {
@@ -39,31 +45,31 @@ function App() {
       }
     };
 
-    const storedFavArray = localStorage.getItem("favArray");
-    if (storedFavArray) {
-      setFav(JSON.parse(storedFavArray));
-    }
-
     apiLoading();
 
     return () => abortController.abort();
   }, [pokeID]);
 
-  const onChangeNext = (isAdd) => {
+  const onChangeNextForLearning = (isAdd) => {
     console.log("isAdd :", isAdd);
     setPokeID((prevValue) => {
-      console.log("prevValue :",prevValue);
-      return isAdd ? prevValue+=1 : prevValue-=1;
+      console.log("prevValue :", prevValue);
+      return isAdd ? (prevValue += 1) : (prevValue -= 1);
     });
   };
 
-  function addFav() {
+  const onChangeNext = (isAdd) => {
+    setPokeID((prevValue) => {
+      return isAdd ? (prevValue += 1) : (prevValue -= 1);
+    });
+  };
+
+  const addFav = () => {
     setFav((prevFavArray) => {
       localStorage.setItem("favArray", JSON.stringify([...prevFavArray, poke]));
-
       return [...prevFavArray, poke];
     });
-  }
+  };
 
   const getBackgroundClass = (types) => {
     switch (types) {
@@ -111,21 +117,28 @@ function App() {
 
   return (
     <>
-      <div className="grid sm:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
         <div
           className={`p-4 rounded-lg shadow-md text-white ${getBackgroundClass(
             poke?.types?.[0]?.type?.name
-          )}`}
+          )}
+          flex flex-col justify-around `}
         >
-          <h1>{poke?.name}</h1>
-          <br />
-          <button onClick={addFav}> Add favorite </button>
-          <input
-            value={userinput}
-            placeholder=" input pokemon ID"
-            onChange={handleSearch}
-          />
-          <button onClick={submitClick}>Submit</button>
+          <div className="flex flex-col justify-around p-2 ">
+            <h1>{poke?.name}</h1>
+
+            <button onClick={addFav} className="object-contain">
+              {" "}
+              Add to PokeDex{" "}
+            </button>
+            <input
+              value={userinput}
+              placeholder=" input pokemon ID"
+              onChange={handleSearch}
+              className="object-contain"
+            />
+            <button onClick={submitClick}>Submit</button>
+          </div>
 
           {[poke && <img src={poke?.sprites?.other?.home.front_default} />]}
           <div className=" flex justify-around ">
@@ -156,10 +169,8 @@ function App() {
               Next{" "}
             </button>
           </div>
-          <br />
         </div>
-
-        <FavoritePokemon favArray={fav} a={userinput} />
+        <FavoritePokemon favArray={fav} setFavFunc={setFav} />
       </div>
     </>
   );
