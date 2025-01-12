@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
-import FavoritePokemon from "./FavoritePokemon";
+import FavoritePokemon from "./Component/FavoritePokemon";
 
 /* 12-01 progress   */
 function App() {
@@ -11,13 +11,15 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [fav, setFav] = useState([]);
 
+  const [userinput, setUserInput] = useState(null);
+
   useEffect(() => {
     setLoading(true);
     let abortController = new AbortController();
 
     const apiLoading = async () => {
       try {
-        let response = await axios.get(
+        const response = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/${pokeID}`,
           {
             signal: abortController.signal,
@@ -27,6 +29,7 @@ function App() {
         setPoke(response.data);
         console.log("poke :", poke);
         console.log("poke name :", poke.species.name);
+
         setError("");
         setLoading(false);
       } catch (error) {
@@ -36,27 +39,28 @@ function App() {
       }
     };
 
+    const storedFavArray = localStorage.getItem("favArray");
+    if (storedFavArray) {
+      setFav(JSON.parse(storedFavArray));
+    }
+
     apiLoading();
 
     return () => abortController.abort();
   }, [pokeID]);
 
-  function onChangeNext() {
+  const onChangeNext = (isAdd) => {
+    console.log("isAdd :", isAdd);
     setPokeID((prevValue) => {
-      // console.log("next click")
-      return (prevValue += 1);
+      console.log("prevValue :",prevValue);
+      return isAdd ? prevValue+=1 : prevValue-=1;
     });
-  }
-
-  function onChangePrev() {
-    setPokeID((prevValue) => {
-      // console.log("prev click")
-      return (prevValue -= 1);
-    });
-  }
+  };
 
   function addFav() {
     setFav((prevFavArray) => {
+      localStorage.setItem("favArray", JSON.stringify([...prevFavArray, poke]));
+
       return [...prevFavArray, poke];
     });
   }
@@ -90,15 +94,38 @@ function App() {
     }
   };
 
+  function handleSearch(event) {
+    // const{name,value} = target
+    let a = event.target.value;
+    setUserInput((prevName) => {
+      console.log("prevName :", prevName);
+      return a;
+    });
+
+    console.log("userinput :", userinput);
+  }
+
+  function submitClick() {
+    setPokeID(userinput);
+  }
+
   return (
     <>
       <div className="grid sm:grid-cols-1 md:grid-cols-2 sm:grid-cols-2 gap-4">
         <div
-          className={`p-4 rounded-lg shadow-md text-white ${ getBackgroundClass(poke?.types?.[0]?.type?.name)}`}
+          className={`p-4 rounded-lg shadow-md text-white ${getBackgroundClass(
+            poke?.types?.[0]?.type?.name
+          )}`}
         >
           <h1>{poke?.name}</h1>
           <br />
           <button onClick={addFav}> Add favorite </button>
+          <input
+            value={userinput}
+            placeholder=" input pokemon ID"
+            onChange={handleSearch}
+          />
+          <button onClick={submitClick}>Submit</button>
 
           {[poke && <img src={poke?.sprites?.other?.home.front_default} />]}
           <div className=" flex justify-around ">
@@ -109,7 +136,10 @@ function App() {
           <br />
           <div className="flex justify-around ">
             <button
-              onClick={onChangePrev}
+              onClick={() => {
+                console.log("prev");
+                onChangeNext(false);
+              }}
               className="bg-gradient-to-r from-green-400 to-blue-500"
             >
               Previous
@@ -117,7 +147,10 @@ function App() {
             <br />
 
             <button
-              onClick={onChangeNext}
+              onClick={() => {
+                console.log("next");
+                onChangeNext(true);
+              }}
               className="bg-gradient-to-r from-green-400 to-blue-500"
             >
               Next{" "}
@@ -125,11 +158,8 @@ function App() {
           </div>
           <br />
         </div>
-        <div className=" rounded-lg bg-gray-700">
-          <h2>Favorite prokemon</h2>
-          <br />
-          <FavoritePokemon favArray={fav} />
-        </div>
+
+        <FavoritePokemon favArray={fav} a={userinput} />
       </div>
     </>
   );
