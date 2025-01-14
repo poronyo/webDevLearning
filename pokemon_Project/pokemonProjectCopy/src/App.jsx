@@ -10,7 +10,6 @@ function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [fav, setFav] = useState([]);
-
   const [userinput, setUserInput] = useState(null);
 
   useEffect(() => {
@@ -100,7 +99,19 @@ function App() {
     }
   };
 
-  function handleSearch(event) {
+  
+  const handleSearch = (event) => {
+    setUserInput(event.target.value);
+    console.log("input type : ", typeof event.target.value);
+
+    return null;
+  };
+
+  const submitSearch = () => {
+    setPokeID((prevValue) => parseInt(userinput));
+  };
+
+  function handleSearched(event) {
     // const{name,value} = target
     let a = event.target.value;
     setUserInput((prevName) => {
@@ -111,7 +122,7 @@ function App() {
     console.log("userinput :", userinput);
   }
 
-  function submitClick() {
+  function submitClicked() {
     setPokeID(userinput);
   }
 
@@ -124,23 +135,33 @@ function App() {
           )}
           flex flex-col justify-around `}
         >
-          <div className="flex flex-col justify-around p-2 ">
-            <h1>{poke?.name}</h1>
+          <div className="flex flex-col space-y-4 items-center ">
+            <h1>
+              {poke?.name} {pokeID}
+            </h1>
 
             <button onClick={addFav} className="object-contain">
               {" "}
               Add to PokeDex{" "}
             </button>
             <input
+              type="number"
               value={userinput}
               placeholder=" input pokemon ID"
               onChange={handleSearch}
-              className="object-contain"
+              className="object-none bg-transparent text-center font-extrabold "
             />
-            <button onClick={submitClick}>Submit</button>
+            <button onClick={submitSearch}>Submit</button>
           </div>
 
-          {[poke && <img src={poke?.sprites?.other?.home.front_default} />]}
+          {[
+            poke && (
+              <img
+                className=""
+                src={poke?.sprites?.other?.home.front_default}
+              />
+            ),
+          ]}
           <div className=" flex justify-around ">
             {poke?.abilities?.map((item, index) => {
               return <button key={index}>{item.ability.name}</button>;
