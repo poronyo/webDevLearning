@@ -35,7 +35,7 @@ function App() {
 
         setPoke(response.data);
         console.log("poke :", poke);
-        console.log("poke name :", poke.species.name);
+        //console.log("poke name :", poke.species.name);
         setError("");
         setLoading(false);
       } catch (error) {
@@ -161,7 +161,7 @@ function App() {
 
             <button
               onClick={() => {
-                console.log("next");
+                //console.log("next");
                 onChangeNext(true);
               }}
               className="bg-gradient-to-r from-green-400 to-blue-500"
