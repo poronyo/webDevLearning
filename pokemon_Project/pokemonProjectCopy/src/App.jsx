@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import ReactLoading from "react-loading";
 import "./App.css";
 import axios from "axios";
 import FavoritePokemon from "./Component/FavoritePokemon";
@@ -10,7 +11,7 @@ function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [fav, setFav] = useState([]);
-  const [userinput, setUserInput] = useState(null);
+  const [userinput, setUserInput] = useState(1);
 
   useEffect(() => {
     const storedFavArray = localStorage.getItem("favArray");
@@ -99,7 +100,6 @@ function App() {
     }
   };
 
-  
   const handleSearch = (event) => {
     setUserInput(event.target.value);
     console.log("input type : ", typeof event.target.value);
@@ -135,62 +135,79 @@ function App() {
           )}
           flex flex-col justify-around `}
         >
-          <div className="flex flex-col space-y-4 items-center ">
-            <h1>
-              {poke?.name} {pokeID}
-            </h1>
-
-            <button onClick={addFav} className="object-contain">
-              {" "}
-              Add to PokeDex{" "}
-            </button>
-            <input
-              type="number"
-              value={userinput}
-              placeholder=" input pokemon ID"
-              onChange={handleSearch}
-              className="object-none bg-transparent text-center font-extrabold "
-            />
-            <button onClick={submitSearch}>Submit</button>
-          </div>
-
-          {[
-            poke && (
-              <img
-                className=""
-                src={poke?.sprites?.other?.home.front_default}
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <ReactLoading
+                type="spin"
+                color="blue"
+                height={"20%"}
+                width={"20%"}
               />
-            ),
-          ]}
-          <div className=" flex justify-around ">
-            {poke?.abilities?.map((item, index) => {
-              return <button key={index}>{item.ability.name}</button>;
-            })}
-          </div>
-          <br />
-          <div className="flex justify-around ">
-            <button
-              onClick={() => {
-                console.log("prev");
-                onChangeNext(false);
-              }}
-              className="bg-gradient-to-r from-green-400 to-blue-500"
-            >
-              Previous
-            </button>
-            <br />
+            </div>
+          ) : (
+            <>
+              <div className="flex flex-col space-y-4 items-center ">
+                <h1>
+                  {poke?.name} {pokeID}
+                </h1>
 
-            <button
-              onClick={() => {
-                //console.log("next");
-                onChangeNext(true);
-              }}
-              className="bg-gradient-to-r from-green-400 to-blue-500"
-            >
-              Next{" "}
-            </button>
-          </div>
+                <div>
+                  <input
+                    type="number"
+                    value={userinput}
+                    placeholder=" input pokemon ID"
+                    onChange={handleSearch}
+                    className="object-none bg-transparent text-center font-extrabold "
+                  />
+                  <button onClick={addFav} className="object-contain">
+                    {" "}
+                    Add to PokeDex{" "}
+                  </button>
+                </div>
+
+                <button onClick={submitSearch}>Submit</button>
+              </div>
+
+              {[
+                poke && (
+                  <img
+                    className=""
+                    src={poke?.sprites?.other?.home.front_default}
+                  />
+                ),
+              ]}
+              <div className=" flex justify-around ">
+                {poke?.abilities?.map((item, index) => {
+                  return <button key={index}>{item.ability.name}</button>;
+                })}
+              </div>
+              <br />
+              <div className="flex justify-around ">
+                <button
+                  onClick={() => {
+                    console.log("prev");
+                    onChangeNext(false);
+                  }}
+                  className="bg-gradient-to-r from-green-400 to-blue-500"
+                >
+                  Previous
+                </button>
+                <br />
+
+                <button
+                  onClick={() => {
+                    //console.log("next");
+                    onChangeNext(true);
+                  }}
+                  className="bg-gradient-to-r from-green-400 to-blue-500"
+                >
+                  Next{" "}
+                </button>
+              </div>
+            </>
+          )}
         </div>
+
         <FavoritePokemon favArray={fav} setFavFunc={setFav} />
       </div>
     </>
