@@ -11,7 +11,7 @@ function App() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [fav, setFav] = useState([]);
-  const [userinput, setUserInput] = useState(1);
+  const [userinput, setUserInput] = useState(null);
 
   useEffect(() => {
     const storedFavArray = localStorage.getItem("favArray");
@@ -108,23 +108,29 @@ function App() {
   };
 
   const submitSearch = () => {
+    if (!userinput || isNaN(userinput) || userinput.trim() === "") {
+      console.error("Invalid input. Please enter a valid number.");
+      return; // Prevent setting an invalid value
+    }
     setPokeID((prevValue) => parseInt(userinput));
   };
 
-  function handleSearched(event) {
-    // const{name,value} = target
-    let a = event.target.value;
-    setUserInput((prevName) => {
-      console.log("prevName :", prevName);
-      return a;
-    });
+  // old version function
+  // function handleSearched(event) {
+  //   // const{name,value} = target
+  //   let a = event.target.value;
+  //   setUserInput((prevName) => {
+  //     console.log("prevName :", prevName);
+  //     return a;
+  //   });
 
-    console.log("userinput :", userinput);
-  }
+  //   console.log("userinput :", userinput);
+  // }
 
-  function submitClicked() {
-    setPokeID(userinput);
-  }
+  // old version function
+  // function submitClicked() {
+  // setPokeID(userinput);
+  // }
 
   return (
     <>
