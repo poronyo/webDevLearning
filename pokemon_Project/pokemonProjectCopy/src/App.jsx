@@ -1,7 +1,7 @@
 import { useState, useEffect, Suspense } from "react";
 import ReactLoading from "react-loading";
-import "./App.css";
 import axios from "axios";
+import "./App.css";
 import FavoritePokemon from "./Component/FavoritePokemon";
 
 /* 12-01 progress   */
