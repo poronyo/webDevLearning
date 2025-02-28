@@ -30,8 +30,16 @@ export default function Page() {
 
   return (
     <div>
-      <div>Hello world pages test2</div>
-      <div>{blogState.length}</div>
+      <div>
+        <div className="font-bold text-2xl text-cyan-300">content pages</div>
+        <ol>
+          {blogState.map((blog, index) => (
+            <li key={index}>
+              {blog.id}. {blog.title} : {blog.price}
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
   );
 }

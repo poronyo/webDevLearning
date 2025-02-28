@@ -16,7 +16,7 @@ async function page() {
       <ol>
         {blogs.map((blog, index) => (
           <li key={index}>
-            {blog.title} : {blog.price}
+            {blog.id}. {blog.title} : {blog.price}
           </li>
         ))}
       </ol>
